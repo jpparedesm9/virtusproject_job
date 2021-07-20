@@ -54,7 +54,7 @@ return {stockNew,price};
 
 async function updateProducts(docs) {
   for (let x in docs) {
-    await sleep(1000);
+    await sleep(10000);
    
     let doc = docs[x];
     try {
