@@ -75,12 +75,6 @@ async function updateProducts(docs) {
 
         }
         else {
-          //const response = await axios.get(`http://aries.delyclar.com//individual/clar3901/${doc.sku}`);
-          /*let objToUpdate = {
-            "sku": doc.sku,
-            "price": response.data["PRECIO_A"],
-            "quantity": response.data["EXISTENCIA"]
-          };*/
           let currentPrice = getStockToUpdate(doc);
           if (doc.QuantityInStock !== stockNew) {
             let updateProduct = await Product.findOneAndUpdate({ "SKU": "0802986226025" },
