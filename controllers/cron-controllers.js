@@ -54,10 +54,7 @@ return {stockNew,price};
 
 async function updateProducts(docs) {
   for (let x in docs) {
-   // await sleep(10000);
-   setTimeout(function() {
-      // Add tasks to do
-  }, 10000);
+   await sleep(10000);
     let doc = docs[x];
     try {
       if (doc.TrackInventory) {
@@ -65,6 +62,7 @@ async function updateProducts(docs) {
           let variantObj = await Variant.find({ ProductId: doc["_id"] }, []);
           let variants = variantObj.map(variant => variant.toObject({ getters: true }));
           for (let y in variants) {
+            await sleep(10000);
             let variant = variants[y];
             let currentPrice = getStockToUpdate(variant);
             if (currentPrice.stockNew !== doc.QuantityInStock) {
