@@ -71,7 +71,7 @@ async function updateProducts(docs) {
               let updateVariant = await Product.findOneAndUpdate({ "_id": variantObj["_id"] }, { "QuantityInStock": currentPrice.stockNew }, {
                 returnOriginal: false
               });
-              this.updateWixStock(doc.sku, doc.discountedPrice, stockNew);
+              await updateWixStock(doc.sku, doc.discountedPrice, stockNew);
             }
           }
 
@@ -83,7 +83,7 @@ async function updateProducts(docs) {
               { "Price": rcurrentPrice.price, "QuantityInStock": currentPrice.stockNew }, {
               returnOriginal: false
             });
-            this.updateWixStock(doc.sku, doc.discountedPrice, stockNew);
+            await updateWixStock(doc.sku, doc.discountedPrice, stockNew);
           }
         }
 
@@ -96,10 +96,9 @@ async function updateProducts(docs) {
 const syncProducts = async () => {
   let products;
   try {
-    //products = await Product.find({}, []);
-    let result= await updateWixStock("0802986226025", 12, 10);
-    //let results = products.map(product => product.toObject({ getters: true }));
-    //updateProducts(results);
+    products = await Product.find({}, []);
+    let results = products.map(product => product.toObject({ getters: true }));
+    updateProducts(results);
   } catch (error) {
     //console.error(error);
   }
