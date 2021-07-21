@@ -69,7 +69,7 @@ async function updateProducts(docs) {
               let updateVariant = await Product.findOneAndUpdate({ "_id": variantObj["_id"] }, { "QuantityInStock": currentPrice.stockNew }, {
                 returnOriginal: false
               });
-              //this.updateWixStock(doc.sku, doc.discountedPrice, stockNew);
+              this.updateWixStock(doc.sku, doc.discountedPrice, stockNew);
             }
           }
 
@@ -81,7 +81,7 @@ async function updateProducts(docs) {
               { "Price": rcurrentPrice.price, "QuantityInStock": currentPrice.stockNew }, {
               returnOriginal: false
             });
-            //this.updateWixStock(doc.sku, doc.discountedPrice, stockNew);
+            this.updateWixStock(doc.sku, doc.discountedPrice, stockNew);
           }
         }
 
