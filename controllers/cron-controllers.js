@@ -10,6 +10,7 @@ sleep=(ms)=>{
 }
 
 updateWixStock = async (sku, price, quantity) => {
+  console.log("hola");
   let objToUpdate = {
     sku, price, quantity
   };
