@@ -14,6 +14,8 @@ updateWixStock = async (sku, price, quantity) => {
     sku, price, quantity
   };
   const wixResult = await axios.put(`https://firoos.wixsite.com/delypruebas/_functions/updateBySku`, objToUpdate);
+  
+  console.log("se ejecuta la peticioin",wixResult);
 }
 
 
@@ -23,7 +25,6 @@ getStockToUpdate = async (prod) => {
 
   const ariesQuery = await axios.get(`http://aries.delyclar.com//individual/clar3901/${prod.SKU}`);
   if(ariesQuery.data!==null){
-    console.log(ariesQuery);
   if(typeof ariesQuery.data["PRECIO_A"]!=="undefined")
   {
   price=ariesQuery.data["PRECIO_A"];
@@ -87,7 +88,7 @@ async function updateProducts(docs) {
 
       }
     } catch (error) {
-      console.error(error);
+      //console.error(error);
     }
   }
 }
@@ -98,7 +99,7 @@ const syncProducts = async () => {
     let results = products.map(product => product.toObject({ getters: true }));
     updateProducts(results);
   } catch (error) {
-    console.error(error);
+    //console.error(error);
   }
 };
 exports.syncProducts = syncProducts;
