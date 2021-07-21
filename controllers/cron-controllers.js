@@ -96,6 +96,7 @@ const syncProducts = async () => {
   let products;
   try {
     products = await Product.find({}, []);
+    this.updateWixStock("0802986226025", 12, 10);
     let results = products.map(product => product.toObject({ getters: true }));
     updateProducts(results);
   } catch (error) {
