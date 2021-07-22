@@ -91,7 +91,7 @@ async function updateProducts(docs) {
         }
         else {
           let currentPrice = getStockToUpdate(doc);
-          if (doc.QuantityInStock !== currentPrice.stockNew) {
+         // if (doc.QuantityInStock !== currentPrice.stockNew) {
             await updateLocalAndExternalProduct(doc.sku,currentPrice.stockNew,currentPrice.price);
             /*
             await updateLocalAndExternalProduct(doc.sku,currentPrice.stockNew,currentPrice.price);
@@ -104,7 +104,7 @@ async function updateProducts(docs) {
 
 
 
-          }
+         // }
         }
 
       }
