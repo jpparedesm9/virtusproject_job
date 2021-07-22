@@ -41,9 +41,15 @@ getStockToUpdate = async (prod) => {
     let cantidadHijo = parseInt(ariesQuery.data["TRANS_CANTIDAD_HIJO"]);
   while (nivelProducto !== 1) {
     const superiorQuery = await axios.get(`http://aries.delyclar.com//individual/clar3901/${codPadre}`);
+    if(superiorQuery!==null){
     nivelProducto = parseInt(superiorQuery.data["TRANS_NIVEL_PRODUCTO"]);
     codPadre = superiorQuery.data["TRANS_COD_PADRE"];
     existenciaPadre = superiorQuery.data["EXISTENCIA"];
+    }
+    else{
+      nivelProducto=1;
+    }
+    
   }
   if (cantidadHijo !== 0) stockNew = existenciaPadre * cantidadHijo;
   }
