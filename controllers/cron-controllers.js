@@ -54,6 +54,14 @@ getStockToUpdate = async (prod) => {
 return {stockNew,price};
 }
 
+async function updateLocalAndExternalProduct(sku,stock,price){
+    let updateProduct = await Product.findOneAndUpdate({ "SKU": sku },
+    { "Price": price, "QuantityInStock": stock }, {
+    returnOriginal: false
+    });
+    await updateWixStock(sku, price, stock);
+}
+
 async function updateProducts(docs) {
   for (let x in docs) {
    await sleep(1000);
@@ -63,27 +71,39 @@ async function updateProducts(docs) {
         if (doc.ManageVariants) {
           let variantObj = await Variant.find({ ProductId: doc["_id"] }, []);
           let variants = variantObj.map(variant => variant.toObject({ getters: true }));
+          let parentStock=0;
           for (let y in variants) {
             await sleep(1000);
             let variant = variants[y];
             let currentPrice = getStockToUpdate(variant);
+            parentStock+=currentPrice.stockNew;
             if (currentPrice.stockNew !== doc.QuantityInStock) {
-              let updateVariant = await Variant.findOneAndUpdate({ "_id": variantObj["_id"] }, {'$set': { "stocks.stock": currentPrice.stock } }, {
+              let inStock=currentPrice.stockNew>0
+              let updateVariant = await Variant.findOneAndUpdate({ "_id": variantObj["_id"] }, 
+              {'$set': { "Stock.stock": currentPrice.stockNew, "Stock.inStock":inStock} }, {
                 returnOriginal: false
               });
-              await updateWixStock(doc.sku, doc.discountedPrice, stockNew);
+              //await updateWixStock(doc.sku, doc.discountedPrice, stockNew);
             }
+            
           }
-
+          await updateLocalAndExternalProduct(doc.sku,parentStock,0); ///revisar precio a actualizar
         }
         else {
           let currentPrice = getStockToUpdate(doc);
-          if (doc.QuantityInStock !== stockNew) {
+          if (doc.QuantityInStock !== currentPrice.stockNew) {
+            await updateLocalAndExternalProduct(doc.sku,currentPrice.stockNew,currentPrice.price);
+            /*
+            await updateLocalAndExternalProduct(doc.sku,currentPrice.stockNew,currentPrice.price);
             let updateProduct = await Product.findOneAndUpdate({ "SKU": "0802986226025" },
               { "Price": rcurrentPrice.price, "QuantityInStock": currentPrice.stockNew }, {
               returnOriginal: false
             });
             await updateWixStock(doc.sku, doc.discountedPrice, stockNew);
+*/
+
+
+
           }
         }
 
@@ -104,3 +124,4 @@ const syncProducts = async () => {
   }
 };
 exports.syncProducts = syncProducts;
+
