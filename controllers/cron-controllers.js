@@ -68,7 +68,7 @@ async function updateProducts(docs) {
             let variant = variants[y];
             let currentPrice = getStockToUpdate(variant);
             if (currentPrice.stockNew !== doc.QuantityInStock) {
-              let updateVariant = await Product.findOneAndUpdate({ "_id": variantObj["_id"] }, { "QuantityInStock": currentPrice.stockNew }, {
+              let updateVariant = await Variant.findOneAndUpdate({ "_id": variantObj["_id"] }, {'$set': { "stocks.stock": currentPrice.stock } }, {
                 returnOriginal: false
               });
               await updateWixStock(doc.sku, doc.discountedPrice, stockNew);
